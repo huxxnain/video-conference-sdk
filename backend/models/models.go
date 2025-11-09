@@ -36,3 +36,4 @@ type QueueEntry struct {
 	RoomID    uint      `gorm:"index"`
 	JoinedAt  time.Time
 	Resolved  bool      `gorm:"default:false"`
+}

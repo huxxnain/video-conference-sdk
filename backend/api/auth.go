@@ -12,8 +12,8 @@ import (
 
 // Signup payload
 type SignupReq struct {
-	OrgName string `json:"org_name" binding:"required"`
-	Email   string `json:"email" binding:"required,email"`
+	OrgName  string `json:"org_name" binding:"required"`
+	Email    string `json:"email" binding:"required,email"`
 	Password string `json:"password" binding:"required,min=6"`
 }
 
@@ -24,7 +24,7 @@ type LoginReq struct {
 }
 
 // POST /auth/signup
-func signupHandler(c *gin.Context) {
+func SignupHandler(c *gin.Context) {
 	var req SignupReq
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid data", "err": err.Error()})
@@ -53,7 +53,7 @@ func signupHandler(c *gin.Context) {
 }
 
 // POST /auth/login
-func loginHandler(c *gin.Context) {
+func LoginHandler(c *gin.Context) {
 	var req LoginReq
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid data", "err": err.Error()})

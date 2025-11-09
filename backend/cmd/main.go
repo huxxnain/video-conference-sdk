@@ -1,18 +1,20 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"video-conference-sdk/backend/config"
 	"video-conference-sdk/backend/db"
 	"video-conference-sdk/backend/api"
-	"video-conference-sdk/backend/ws"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	config.Load()
-	db.SetupDatabase()
+	db.InitPostgres()
 	r := gin.Default()
-	api.RegisterRoutes(r)
-	ws.RegisterWebSocketRoutes(r)
-	r.Run(":" + config.ServerPort)
+
+	r.POST("/auth/signup", api.SignupHandler)
+	r.POST("/auth/login", api.LoginHandler)
+	r.POST("/room/create", api.CreateRoomHandler)
+	r.POST("/room/join", api.JoinQueueHandler)
+	r.GET("/ws/signaling", api.SignalingHandler)
+
+	r.Run(":8080")
 }

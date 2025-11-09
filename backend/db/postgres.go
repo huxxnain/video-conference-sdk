@@ -3,21 +3,22 @@ package db
 import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"log"
-	"video-conference-sdk/backend/models"
-	"video-conference-sdk/backend/config"
+	"os"
 )
 
 var DB *gorm.DB
 
-func SetupDatabase() {
-	var err error
-	DB, err = gorm.Open(postgres.Open(config.PostgresDSN), &gorm.Config{})
-	if err != nil {
-		log.Fatal("Database connection failed: ", err)
+func InitPostgres() {
+	dsn := os.Getenv("DATABASE_URL")
+	if dsn == "" {
+		dsn = "postgres://user:password@localhost:5432/vconfdb"
 	}
-	err = DB.AutoMigrate(&models.Organization{}, &models.User{}, &models.Room{}, &models.QueueEntry{})
+	database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatal("Migration error: ", err)
+		panic("failed to connect to database")
 	}
+	DB = database
+
+	// Auto migrate models here as needed
+	// DB.AutoMigrate(&models.Organization{}, &models.User{}, &models.Room{}, &models.QueueEntry{})
 }
